@@ -6,6 +6,7 @@ def yes?(q)
   origin_yes?(q) || ENV["TESTING_APP_TEMPLATE"]
 end
 
+run 'rm Gemfile.lock' if yes?("Did you install Rails to this directory via bundler?")
 run 'rm -rf test'
 run %Q(echo "\nvendor/bundle\n" .gitignore)
 uncomment_lines 'Gemfile', 'therubyracer'
