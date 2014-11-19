@@ -13,12 +13,18 @@ uncomment_lines 'Gemfile', 'therubyracer'
 comment_lines 'Gemfile', 'spring'
 comment_lines 'Gemfile', 'sqlite3'
 
+devise = yes?("Would you like to use devise?")
+cancancan = yes?("Would you like to use cancancan?")
+heroku = yes?("Would you like to use Heroku?")
+twitter_bootstrap = yes?("Would you like to use Twitterbootstrap?")
+angularjs = yes?("Would you like to use angular.js?")
+
 gem 'slim-rails'
 gem 'bower-rails'
 
-if yes?("Would you like to use devise?")
+if devise
   gem 'devise'
-  gem 'cancancan' if yes?("Would you like to use cancancan?")
+  gem 'cancancan' if cancancan
 end
 
 gem_group :development, :test do
@@ -48,7 +54,7 @@ end
 
 gem_group :production do
   gem 'pg'
-  if yes?("Would you like to use Heroku?")
+  if heroku
     gem 'rails_12factor'
   else
     gem 'unicorn'
@@ -64,12 +70,12 @@ run 'bin/rails generate rspec:install'
 run "bundle exec guard init rspec"
 
 run 'bin/rails generate bower_rails:initialize'
-if yes?("Would you like to use twitter-bootstrap?")
+if twitter_bootstrap
   run %Q(echo "\nasset 'bootstrap'" >> Bowerfile)
   run %Q(echo "\n*= require bootstrap" >> app/assets/stylesheets/application.css)
   run %Q(echo "\n//= require bootstrap" >> app/assets/javascripts/application.js)
 end
-if yes?("Would you like to use angular.js?")
+if angularjs
   run %Q(echo "\nasset 'angular'" >> Bowerfile)
 end
 inject_into_file 'config/application.rb',
