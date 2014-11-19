@@ -17,6 +17,7 @@ devise = yes?("Would you like to use devise?")
 cancancan = yes?("Would you like to use cancancan?")
 heroku = yes?("Would you like to use Heroku?")
 twitter_bootstrap = yes?("Would you like to use Twitterbootstrap?")
+material_design = yes?("Would you like to use material_design?")
 angularjs = yes?("Would you like to use angular.js?")
 
 gem 'slim-rails'
@@ -69,11 +70,26 @@ run 'bundle exec spring binstub'
 run 'bin/rails generate rspec:install'
 run "bundle exec guard init rspec"
 
+gsub_file("app/assets/stylesheets/application.css", /\*= require_tree \./, '')
+gsub_file("app/assets/javascripts/application.js", /\/\/= require_tree \./, '')
 run 'bin/rails generate bower_rails:initialize'
 if twitter_bootstrap
   run %Q(echo "\nasset 'bootstrap'" >> Bowerfile)
-  run %Q(echo "\n*= require bootstrap" >> app/assets/stylesheets/application.css)
-  run %Q(echo "\n//= require bootstrap" >> app/assets/javascripts/application.js)
+  inject_into_file 'app/assets/stylesheets/application.css',
+    "\n\s*= require bootstrap/dist/css/bootstrap.min.css",
+    :before => '*/'
+  inject_into_file 'app/assets/javascripts/application.js',
+    "\n//= require bootstrap/dist/js/bootstrap.min.js",
+    :before => '// require_tree .'
+end
+if material_design
+  run %Q(echo "\nasset 'bootstrap-material-design'" >>Bowerfile)
+  inject_into_file 'app/assets/stylesheets/application.css',
+    "\n\s*= require bootstrap-material-design/dist/css/material.min.css\n",
+    :before => '*/'
+  inject_into_file 'app/assets/javascripts/application.js',
+    "\n//= require bootstrap-material-design/dist/js/material.min.js",
+    :before => '// require_tree .'
 end
 if angularjs
   run %Q(echo "\nasset 'angular'" >> Bowerfile)
