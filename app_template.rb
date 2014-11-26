@@ -6,6 +6,18 @@ def yes?(q)
   origin_yes?(q) || ENV["TESTING_APP_TEMPLATE"]
 end
 
+def add_to_applicationjs(text)
+  inject_into_file 'app/assets/javascripts/application.js',
+    text,
+    :before => '// require_tree .'
+end
+
+def add_to_applicationcss(text)
+  inject_into_file 'app/assets/stylesheets/application.css',
+    text,
+    :before => '*/'
+end
+
 run 'rm Gemfile.lock' if yes?("Did you install Rails to this directory via bundler?")
 run 'rm -rf test'
 run %Q(echo "\nvendor/bundle\n" .gitignore)
@@ -75,25 +87,21 @@ gsub_file("app/assets/javascripts/application.js", /\/\/= require_tree \./, '')
 run 'bin/rails generate bower_rails:initialize'
 if twitter_bootstrap
   run %Q(echo "\nasset 'bootstrap'" >> Bowerfile)
-  inject_into_file 'app/assets/stylesheets/application.css',
-    "\n\s*= require bootstrap/dist/css/bootstrap.min.css",
-    :before => '*/'
-  inject_into_file 'app/assets/javascripts/application.js',
-    "\n//= require bootstrap/dist/js/bootstrap.min.js",
-    :before => '// require_tree .'
+  add_to_applicationcss %Q(\n\s*= require bootstrap/dist/css/bootstrap.min.css)
+  add_to_applicationjs %Q(\n//= require bootstrap/dist/js/bootstrap.min.js)
 end
+
 if material_design
   run %Q(echo "\nasset 'bootstrap-material-design'" >>Bowerfile)
-  inject_into_file 'app/assets/stylesheets/application.css',
-    "\n\s*= require bootstrap-material-design/dist/css/material.min.css\n",
-    :before => '*/'
-  inject_into_file 'app/assets/javascripts/application.js',
-    "\n//= require bootstrap-material-design/dist/js/material.min.js",
-    :before => '// require_tree .'
+  add_to_applicationcss %Q(\n\s*= require bootstrap-material-design/dist/css/material.min.css\n)
+  add_to_applicationjs %Q(\n//= require bootstrap-material-design/dist/js/material.min.js)
 end
+
 if angularjs
   run %Q(echo "\nasset 'angular'" >> Bowerfile)
+  # require angular
 end
+
 inject_into_file 'config/application.rb',
   "\n\s\s\s\sconfig.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')",
   :after => "class Application < Rails::Application"
