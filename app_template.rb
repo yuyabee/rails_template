@@ -20,7 +20,6 @@ end
 
 run 'rm Gemfile.lock' if yes?("Did you install Rails to this directory via bundler?")
 run 'rm -rf test'
-run %Q(echo "\nvendor/bundle\n" .gitignore)
 uncomment_lines 'Gemfile', 'therubyracer'
 comment_lines 'Gemfile', 'spring'
 comment_lines 'Gemfile', 'sqlite3'
@@ -109,5 +108,7 @@ run "bin/rake bower:install['--allow-root']"
 run 'bin/rake db:migrate'
 
 git :init
+run %Q(echo "vendor/bundle" >> .gitignore)
+run %Q(echo "vendor/assets/bower_components" >> .gitignore)
 git add: "."
 git commit: %Q(-m "initial commit")
