@@ -91,7 +91,7 @@ if twitter_bootstrap
 end
 
 if material_design
-  run %Q(echo "\nasset 'bootstrap-material-design'" >>Bowerfile)
+  run %Q(echo "\nasset 'bootstrap-material-design'" >> Bowerfile)
   add_to_applicationcss %Q(\n\s*= require bootstrap-material-design/dist/css/material.min.css\n)
   add_to_applicationjs %Q(\n//= require bootstrap-material-design/dist/js/material.min.js)
 end
@@ -110,5 +110,6 @@ run 'bin/rake db:migrate'
 git :init
 run %Q(echo "vendor/bundle" >> .gitignore)
 run %Q(echo "vendor/assets/bower_components" >> .gitignore)
+run %Q(echo "bin" >> .gitignore)
 git add: "."
 git commit: %Q(-m "initial commit")
