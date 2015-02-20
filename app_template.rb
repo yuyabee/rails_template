@@ -110,6 +110,5 @@ run 'bin/rake db:migrate'
 git :init
 run %Q(echo "vendor/bundle" >> .gitignore)
 run %Q(echo "vendor/assets/bower_components" >> .gitignore)
-run %Q(echo "bin" >> .gitignore)
 git add: "."
 git commit: %Q(-m "initial commit")
