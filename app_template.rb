@@ -47,7 +47,6 @@ gem_group :development, :test do
   gem 'guard-bundler'
   gem 'guard-rails'
   gem 'guard-rspec'
-  gem 'guard-spring'
   gem 'capybara'
   gem 'factory_girl_rails'
   gem 'terminal-notifier-guard'
