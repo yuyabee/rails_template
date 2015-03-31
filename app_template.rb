@@ -107,7 +107,8 @@ run "bin/rake bower:install['--allow-root']"
 run 'bin/rake db:migrate'
 
 git :init
-run %Q(echo "vendor/bundle" >> .gitignore)
-run %Q(echo "vendor/assets/bower_components" >> .gitignore)
+run %Q(echo "/vendor/bundle" >> .gitignore)
+run %Q(echo "/vendor/assets/bower_components" >> .gitignore)
+run %Q(echo "/config/database.yml" >> .gitignore)
 git add: "."
 git commit: %Q(-m "Initial Commit")
